@@ -34,20 +34,15 @@ if ($subAction == 'pass') {
                 chmod($obj.'/'.$objHold['object_file'], 0777);
                 rename($obj.'/'.$objHold['object_file'], $sub.'/'.$objHold['object_file']);
                 
-                if ($rightWriteSide != 0) {
-                    $scribeSide = $rightObjPrice.' '.$rightCurrency;
-                } else {
-                    $scribeSide = $rightCurrency.$rightObjPrice;
-                }
-                
-                $printString = $turnNum.' : '.$objFullName.' DEBIT '.$objHold['name'].' '.$subFullName.' CREDIT '.$scribeSide.'<br>';
+                $scribeSide = ($rightWriteSide != 0) ? $rightObjPrice.' '.$rightCurrency : $rightCurrency.$rightObjPrice;
+                $printString = $turnNum.' : '.$objHold['name'].' '.$diction[$proLingo]['trade']['pro'].' '.$scribeSide.' | '.$diction[$proLingo]['transaction']['00'].'<br>';
             } else {
-                $printString = $turnNum.' : '.$diction[$proLingo]['transaction']['51'].'<br>';
+                $printString = $turnNum.' : '.$diction[$proLingo]['trade']['quid'].' '.$diction[$proLingo]['trade']['pro'].' '.$diction[$proLingo]['trade']['quo'].' | '.$diction[$proLingo]['transaction']['51'].'<br>';
             }
         } else {
-            $printString = $turnNum.' : '.$diction[$proLingo]['transaction']['12'].'<br>';
+            $printString = $turnNum.' : '.$diction[$proLingo]['trade']['quid'].' '.$diction[$proLingo]['trade']['pro'].' '.$diction[$proLingo]['trade']['quo'].' | '.$diction[$proLingo]['transaction']['12'].'<br>';
         }
     } else {
-        $printString = $turnNum.' : '.$diction[$proLingo]['transaction']['30'].'<br>';
+        $printString = $turnNum.' : '.$diction[$proLingo]['trade']['quid'].' '.$diction[$proLingo]['trade']['pro'].' '.$diction[$proLingo]['trade']['quo'].' | '.$diction[$proLingo]['transaction']['30'].'<br>';
     }
 }
