@@ -1,5 +1,19 @@
 <?php
 
+function getParseArr($name): array {
+    $str = file_get_contents($name);
+    $arr = explode('|[1]|', $str);
+    $obj = [];
+    foreach ($arr as $line) {
+        $div = explode('|[>]|', $line);
+        $prop = $div[0];
+        $val = $div[1];
+        $obj[$prop] = $val;
+    }
+    
+    return $obj;
+}
+
 $getMoney = file_get_contents('money');
 
 $input = $_REQUEST['i'];

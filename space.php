@@ -275,10 +275,9 @@ function initMine($agent) {
     return $resultArr;
 }
 
-function initExchange($paradigm, $year, $left, $right, $object, $zones) {
-    $econList = $zones;
+function getZonesData($zones) {
     $econValues = [];
-    foreach ($econList as $str) {
+    foreach ($zoneList as $str) {
         if (file_exists($str.'.curval')) {
             if (is_numeric(file_get_contents($str.'.curval'))) {
                 $econValues[$str] = file_get_contents($str.'.curval');
@@ -289,8 +288,20 @@ function initExchange($paradigm, $year, $left, $right, $object, $zones) {
             $econValues[$str] = 1;
         }
     }
+    $econSides = [];
+    foreach ($zoneList as $str) {
+        if (file_exists($str.'.curside')) {
+            if (is_numeric(file_get_contents($str.'.curside'))) {
+                $econSides[$str] = file_get_contents($str.'.curside');
+            } else {
+                $econSides[$str] = 1;
+            }
+        } else {
+            $econSides[$str] = 1;
+        }
+    }
     $econSigns = [];
-    foreach ($econList as $str) {
+    foreach ($zoneList as $str) {
         if (file_exists($str.'.cur')) {
             if ((file_get_contents($str.'.cur')) != '') {
                 $econSigns[$str] = file_get_contents($str.'.cur');
@@ -304,73 +315,10 @@ function initExchange($paradigm, $year, $left, $right, $object, $zones) {
     
     $econArr = [];
     $econArr['values'] = $econValues;
+    $econArr['sides'] = $econSides;
     $econArr['signs'] = $econSigns;
     
-    $econSigns = $econArr['signs'];
-    $econValues = $econArr['values'];
-
-    $leftID = useNotation($left);
-    $leftStr = useFullName($left);
-    $rightID = useNotation($right);
-    $rightStr = useFullName($right);
-    $leftMoney = file_get_contents($left.'/money');
-    $rightMoney = file_get_contents($right.'/money');
-    $leftLocale = file_get_contents($left.'/locale');
-    $rightLocale = file_get_contents($right.'/locale');
-
-    $leftCurVal = $econValues[$leftLocale];
-    $rightCurVal = $econValues[$rightLocale];
-    $leftCurSign = $econSigns[$leftLocale];
-    $rightCurSign = $econSigns[$rightLocale];
-    $leftExchRate = ratioCalc($rightCurVal, $leftCurVal);
-    $rightExchRate = ratioCalc($leftCurVal, $rightCurVal);
-    
-    $formyear = turnFormat($paradigm, $year);
-    $systemLocale = file_get_contents('locale');
-    include $systemLocale.'.diction.php';
-    
-    if ($object !== null) {
-        $objFile = $object['object_file'];
-        $objClass = $object['object_class'];
-        $objID = $object['object_id'];
-        $objName = $object['name'];
-        $objPrice = $object['price'];
-        $leftObjPrice = $objPrice * $leftExchRate;
-        $rightObjPrice = $objPrice * $rightExchRate;
-        $leftPrice = $leftCurSign.$leftObjPrice;
-        $rightPrice = $rightCurSign.$rightObjPrice;
-        if (!file_exists($right."/".$objFile)) {
-            if ($rightMoney >= $rightObjPrice) {
-                $leftMoney += $leftObjPrice;
-                $rightMoney -= $rightObjPrice;
-                chmod($left."/".$objFile, 0777);
-                rename($left."/".$objFile, $right."/".$objFile);
-                $excode = '00';
-                $onleft = $leftStr.' + '.$objName;
-                $onright = $rightStr.' - '.$rightMoney;
-                $notation = $formyear.' : DEBIT '.$leftStr.' '.$objName.' CREDIT '.$rightStr.' '.$rightMoney.' '.$rightCurSign;
-            } else {
-                $excode = '51';
-                $notation = $formyear.' : DEBIT '.$leftStr.' CREDIT '.$rightStr.' '.$rightMoney.' '.$rightCurSign;
-            }
-        } else {
-            $excode = '12';
-            $notation = $formyear.' : DEBIT '.$leftStr.' CREDIT '.$rightStr.' '.$rightMoney.' '.$rightCurSign;
-        }
-    } else {
-        $excode = '30';
-        $notation = $formyear.' : DEBIT '.$leftStr.' CREDIT '.$rightStr.' '.$rightMoney.' '.$rightCurSign;
-    }
-    
-    $message = $diction[$systemLocale]['transaction'][$excode];
-
-    
-    
-    echo $notation.'<br>';
-    
-    $resultArr = ['left' => $leftMoney, 'right' => $rightMoney];
-    
-    return $resultArr;
+    return $econArr;
 }
 
 function movement($yearStr, $agentStr, $x, $y, $z, $level, $speed) {

@@ -76,7 +76,7 @@ function localeArr() {
             if ($entry == 'cur' || $entry == 'angsym') {
                 file_put_contents($localeID.'.'.$entry, $data);
                 chmod($localeID.'.'.$entry, 0777);
-            } elseif ($entry == 'mtr' || $entry == 'angdig') {
+            } elseif ($entry == 'mtr' || $entry == 'angdig' || $entry == 'curside') {
                 if (is_numeric($data)) {
                     file_put_contents($localeID.'.'.$entry, $data);
                     chmod($localeID.'.'.$entry, 0777);
@@ -113,7 +113,7 @@ function localeGen($id) {
             if ($entry == 'cur' || $entry == 'angsym') {
                 file_put_contents($id.'/'.$localeID.'.'.$entry, $data);
                 chmod($id.'/'.$localeID.'.'.$entry, 0777);
-            } elseif ($entry == 'mtr' || $entry == 'angdig') {
+            } elseif ($entry == 'mtr' || $entry == 'angdig' || $entry == 'curside') {
                 if (is_numeric($data)) {
                     file_put_contents($id.'/'.$localeID.'.'.$entry, $data);
                     chmod($id.'/'.$localeID.'.'.$entry, 0777);

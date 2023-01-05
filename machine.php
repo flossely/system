@@ -23,6 +23,7 @@ if (file_exists('locale')) {
 } else {
     $proLingo = basename(array_key_first($zoneList), '.locale');
 }
+$zoneArr = str_replace('.locale', '', $zoneList);
 $proZone = getArrayFromFile($proLingo.'.locale');
 $diction = [];
 include $proLingo.'.diction.php';
