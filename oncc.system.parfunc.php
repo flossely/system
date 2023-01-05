@@ -11,7 +11,7 @@ if ($subAction == 'pass') {
     $objRating += $subArousal;
     $printString = $turnNum.' : '.$subFullName.' ('.$subRating.') '.$diction[$proLingo]['action']['666'].' '.$objFullName.' ('.$objRating.')<br>';
 } elseif ($subAction == 'trade') {
-    $econArray = getZonesData($zoneList);
+    $econArray = getZonesData($zoneArr);
     $leftCurrency = $econArray['signs'][$objLingo];
     $rightCurrency = $econArray['signs'][$subLingo];
     $leftWriteSide = $econArray['sides'][$objLingo];

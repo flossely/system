@@ -277,7 +277,7 @@ function initMine($agent) {
 
 function getZonesData($zones) {
     $econValues = [];
-    foreach ($zoneList as $str) {
+    foreach ($zones as $str) {
         if (file_exists($str.'.curval')) {
             if (is_numeric(file_get_contents($str.'.curval'))) {
                 $econValues[$str] = file_get_contents($str.'.curval');
@@ -289,7 +289,7 @@ function getZonesData($zones) {
         }
     }
     $econSides = [];
-    foreach ($zoneList as $str) {
+    foreach ($zones as $str) {
         if (file_exists($str.'.curside')) {
             if (is_numeric(file_get_contents($str.'.curside'))) {
                 $econSides[$str] = file_get_contents($str.'.curside');
@@ -301,7 +301,7 @@ function getZonesData($zones) {
         }
     }
     $econSigns = [];
-    foreach ($zoneList as $str) {
+    foreach ($zones as $str) {
         if (file_exists($str.'.cur')) {
             if ((file_get_contents($str.'.cur')) != '') {
                 $econSigns[$str] = file_get_contents($str.'.cur');
